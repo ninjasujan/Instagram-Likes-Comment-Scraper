@@ -1,0 +1,27 @@
+{
+  "name": "instagram-likes-comment-scraper",
+  "version": "1.0.0",
+  "description": "Assignment work Nodejs and Puppeteer",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninjasujan/Instagram-Likes-Comment-Scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ninjasujan/Instagram-Likes-Comment-Scraper/issues"
+  },
+  "homepage": "https://github.com/ninjasujan/Instagram-Likes-Comment-Scraper#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.7",
+    "nodemon": "^2.0.4",
+    "puppeteer": "^5.3.1"
+  }
+}
