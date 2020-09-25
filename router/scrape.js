@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { getLikes } = require('../controller/scrape');
+const { getLikes, fetchUserNames } = require('../controller/scrape');
 
 router.get('/', getLikes);
+
+router.post('/fetch', fetchUserNames);
 
 module.exports = router;
