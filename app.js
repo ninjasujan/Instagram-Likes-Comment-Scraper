@@ -7,6 +7,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+const likesRoutes = require('./router/scrape');
+
+app.use('/', likesRoutes);
+
 mongoose
   .connect(process.env.DBURL)
   .then(() => {
