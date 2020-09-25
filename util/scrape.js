@@ -22,7 +22,6 @@ async function scrollDown(selector, page) {
 }
 
 /* Function handles Login  */
-
 const login = async (page, userName, password) => {
   await page.waitForSelector('input[name=username]');
   await page.type('input[name=username]', userName, {
@@ -40,3 +39,89 @@ const login = async (page, userName, password) => {
     console.log('------NOTIFY BUTTON NOT CLICKED-----');
   }
 };
+
+/* Function extaacts likes */
+const getAllUserNames = async (userName, password, baseURL) => {
+  /* Initial pagesetup */
+  const browser = await puppeteer.launch({
+    headless: false,
+  });
+  const page = await browser.newPage();
+  const navigationPromise = page.waitForNavigation();
+  await page.goto(baseURL, {
+    waitUntil: 'networkidle2',
+  });
+
+  await page.waitFor(5000);
+  let form = await page.$$('#loginForm');
+
+  if (form.length > 0) {
+    await login(page, userName, password);
+  }
+
+  const bannerSelector =
+    '#react-root > section > main > div > div > article > header > div.o-MQd.z8cbW > div.PQo_0.RqtMr > div.e1e1d > a';
+
+  await page.waitForSelector(bannerSelector);
+  await page.evaluate((_) => {
+    window.scroll(0, 200);
+  });
+
+  const numberOfLikesSelector =
+    'article[role="presentation"] > div:last-child > section:nth-child(2) div > div:last-child button span';
+
+  const totalLikes = await page.$eval(
+    numberOfLikesSelector,
+    (e) => e.textContent
+  );
+
+  console.log('Total Likes', totalLikes);
+
+  const likesButton =
+    '#react-root > section > main > div > div > article > div.eo2As > section.EDfFK.ygqzn > div > div > button > span';
+
+  await page.click(likesButton);
+
+  form = await page.$$('#loginForm');
+
+  if (form.length > 0) {
+    await login(page, userName, password);
+  }
+
+  try {
+    await page.goto(baseURL, { waitUntil: 'networkidle2' });
+    await page.evaluate((_) => {
+      window.scroll(0, 200);
+    });
+    await page.click(likesButton);
+    await page.waitForSelector('div[role="dialog"] > div > div > div > h1');
+
+    await page.waitFor(3000);
+
+    const scrollBox =
+      'div[role="presentation"]  div[role="dialog"] div div:nth-child(2) > div';
+
+    await scrollDown(scrollBox, page);
+
+    const likesSelector =
+      'div[role="dialog"] > div > div:nth-child(2) > div > div > div > div:nth-child(2) > div > div > span a';
+
+    const arr = await page.$$eval(likesSelector, (users) => {
+      return users.map((user) => {
+        return user.textContent;
+      });
+    });
+
+    console.log('[----------] [-----------------]', arr, totalLikes);
+
+    // return {
+    //   totalLikes: totalLikes,
+    //   userNames: arr,
+    // };
+  } catch (err) {
+    console.log('PROMISE ERROR', err.message);
+  }
+  await navigationPromise;
+};
+
+module.exports = getAllUserNames;
