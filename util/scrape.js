@@ -33,14 +33,10 @@ const login = async (page, userName, password) => {
   const notifyBtns = await page.$x("//button[contains(text(), 'Not Now')]");
   if (notifyBtns.length > 0) {
     await notifyBtns[0].click();
-    console.log('-------NOTIFY BUTTON CLICKED--------');
-    return;
-  } else {
-    console.log('------NOTIFY BUTTON NOT CLICKED-----');
   }
 };
 
-/* Function extaacts likes */
+/* Function extaacts userNames  */
 const getAllUserNames = async (userName, password, baseURL) => {
   /* Initial pagesetup */
   const browser = await puppeteer.launch({
@@ -103,6 +99,8 @@ const getAllUserNames = async (userName, password, baseURL) => {
 
     await scrollDown(scrollBox, page);
 
+    await page.waitFor(3000);
+
     const likesSelector =
       'div[role="dialog"] > div > div:nth-child(2) > div > div > div > div:nth-child(2) > div > div > span a';
 
@@ -114,10 +112,11 @@ const getAllUserNames = async (userName, password, baseURL) => {
 
     console.log('[----------] [-----------------]', arr, totalLikes);
 
-    // return {
-    //   totalLikes: totalLikes,
-    //   userNames: arr,
-    // };
+    return {
+      isPrivate: false,
+      totalLikes: totalLikes,
+      userNames: arr,
+    };
   } catch (err) {
     console.log('PROMISE ERROR', err.message);
   }

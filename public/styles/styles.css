@@ -7,3 +7,9 @@ body {
   width: 60%;
   margin: 100px auto;
 }
+
+.container .list p {
+  width: 40%;
+  float: left;
+  padding: 5px;
+}

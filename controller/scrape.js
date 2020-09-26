@@ -1,4 +1,5 @@
 const getAllUserNames = require('../util/scrape');
+const Likes = require('../models/Likes');
 
 exports.getLikes = (req, res, next) => {
   res.render('index');
@@ -6,7 +7,13 @@ exports.getLikes = (req, res, next) => {
 
 exports.fetchUserNames = async (req, res, next) => {
   const { url, username, password } = req.body;
-  console.log(url, username, password);
-  await getAllUserNames(username, password, url);
-  res.end();
+
+  const likesInfo = await getAllUserNames(username, password, url);
+  const newLikeInfo = new Likes({
+    postId: url,
+    likes: likesInfo.totalLikes,
+    userNames: likesInfo.userNames,
+  });
+  await newLikeInfo.save();
+  await newLikeInfo.res.render('list', userInfo);
 };
