@@ -15,5 +15,5 @@ exports.fetchUserNames = async (req, res, next) => {
     userNames: likesInfo.userNames,
   });
   await newLikeInfo.save();
-  await newLikeInfo.res.render('list', userInfo);
+  await res.render('list', likesInfo);
 };

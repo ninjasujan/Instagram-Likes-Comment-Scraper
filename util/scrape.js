@@ -9,14 +9,14 @@ async function scrollDown(selector, page) {
       let distance = 100;
       const timer = setInterval(() => {
         var scrollHeight = section.scrollHeight;
-        section.scrollTop = 100000000;
+        section.scrollTop = 1000000;
         totalHeight += distance;
 
         if (totalHeight >= scrollHeight) {
           clearInterval(timer);
           resolve();
         }
-      }, 900);
+      }, 100);
     });
   }, selector);
 }
@@ -36,7 +36,7 @@ const login = async (page, userName, password) => {
   }
 };
 
-/* Function extaacts userNames  */
+/* Function extracts userNames  */
 const getAllUserNames = async (userName, password, baseURL) => {
   /* Initial pagesetup */
   const browser = await puppeteer.launch({
@@ -70,8 +70,6 @@ const getAllUserNames = async (userName, password, baseURL) => {
     numberOfLikesSelector,
     (e) => e.textContent
   );
-
-  console.log('Total Likes', totalLikes);
 
   const likesButton =
     '#react-root > section > main > div > div > article > div.eo2As > section.EDfFK.ygqzn > div > div > button > span';
@@ -109,8 +107,6 @@ const getAllUserNames = async (userName, password, baseURL) => {
         return user.textContent;
       });
     });
-
-    console.log('[----------] [-----------------]', arr, totalLikes);
 
     return {
       isPrivate: false,
